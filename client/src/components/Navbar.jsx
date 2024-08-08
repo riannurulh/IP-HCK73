@@ -1,6 +1,45 @@
 import { Link, Outlet } from "react-router-dom";
+import Swal from "sweetalert2";
+import PostCreate from "../helpers/PostRequest";
+import { useState } from "react";
 
 const Navbar = () => {
+  const[update,setUpdate] = useState(false)
+  const handlePlan = async () => {
+    try {
+      const dataSwal = await Swal.fire({
+        title: "Enter your details",
+        html: `
+            <label>Weight Goal</label>
+            <input type="text" id="swal-input4" class="swal2-input" placeholder="Weight Goal">
+        `,
+        focusConfirm: false,
+        preConfirm: () => {
+          const weightGoalOn30day =
+            document.getElementById("swal-input4").value;
+
+          if (!weightGoalOn30day) {
+            Swal.showValidationMessage("All fields are required");
+            return false;
+          }
+
+          return { weightGoalOn30day };
+        },
+      });
+      const { weightGoalOn30day } = dataSwal.value;
+      await PostCreate({
+        url: "/generate-plan",
+        method: "POST",
+        data: {weightGoalOn30day},
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      setUpdate(true)
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <header className="flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
@@ -99,14 +138,19 @@ const Navbar = () => {
           </div>
 
           <div className="flex max-lg:ml-auto space-x-3">
-            <Link to='/my-clubs' className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
-              My Club
-            </Link>
-            <Link 
-            to='/login'
-            onClick={()=>{
-                localStorage.clear()
-            }} className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
+            <button
+              onClick={handlePlan}
+              className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
+            >
+              Generate new plan
+            </button>
+            <Link
+              to="/login"
+              onClick={() => {
+                localStorage.clear();
+              }}
+              className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
+            >
               LogOut
             </Link>
 
@@ -127,7 +171,7 @@ const Navbar = () => {
           </div>
         </div>
       </header>
-      <Outlet/>
+      <Outlet update={update}/>
     </>
   );
 };

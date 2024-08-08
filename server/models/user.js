@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: DataTypes.STRING,
     gender: DataTypes.STRING,
+    isSubscribed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue:false},
     password: DataTypes.STRING,
     height: DataTypes.INTEGER,
     weight: DataTypes.INTEGER,
@@ -29,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: (user, options) => {
         user.password = hashPassword(user.password)
-        if (!user.role) {
-          user.role = 'Staff'
+        if (!user.isSubscribed) {
+          user.isSubscribed=false
         }
       },
     },

@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import PostCreate from "../helpers/PostRequest";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,13 +18,91 @@ const Login = () => {
         data: bodyData,
       });
       console.log(data);
-      
-      localStorage.setItem('access_token',data.access_token)
-      navigate("/");
+
+      // localStorage.setItem("access_token", data.access_token);
+      // navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    window.google.accounts.id.initialize({
+      // client_id: "939437554944-at2ut7qrpk9q6kelf2q94vce3lv8knti.apps.googleusercontent.com",
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: async (response) => {
+        console.log("Encoded JWT ID token: " + response.credential);
+
+        // Check if the user already exists
+        try {
+          const userCheckResponse = await axios.post("http://localhost:3000/auth/check-user", {
+            googleToken: response.credential
+          });
+
+          if (userCheckResponse.data.exists) {
+            // User exists, proceed with the login
+            const { data } = await axios.post("http://localhost:3000/auth/google", {
+              googleToken: response.credential
+            });
+
+            localStorage.setItem("access_token", data.access_token);
+            navigate("/");
+          } else {
+            // User does not exist, show Swal to collect additional details
+            const dataSwal = await Swal.fire({
+              title: "Enter your details",
+              html: `
+                      <label>Gender</label>
+                      <input type="text" id="swal-input1" class="swal2-input" placeholder="Gender">
+                      <label>Height</label>
+                      <input type="text" id="swal-input2" class="swal2-input" placeholder="Height">
+                      <label>Weight</label>
+                      <input type="text" id="swal-input3" class="swal2-input" placeholder="Weight">
+                      <label>Weight Goal</label>
+                      <input type="text" id="swal-input4" class="swal2-input" placeholder="Weight Goal">
+                  `,
+              focusConfirm: false,
+              preConfirm: () => {
+                const gender = document.getElementById("swal-input1").value;
+                const height = document.getElementById("swal-input2").value;
+                const weight = document.getElementById("swal-input3").value;
+                const weightGoalOn30day = document.getElementById("swal-input4").value;
+
+                if (!gender || !height || !weight || !weightGoalOn30day) {
+                  Swal.showValidationMessage("All fields are required");
+                  return false;
+                }
+
+                return { gender, height, weight, weightGoalOn30day };
+              },
+            });
+
+            const { gender, height, weight, weightGoalOn30day } = dataSwal.value;
+
+            const { data } = await axios.post("http://localhost:3000/auth/google", {
+              googleToken: response.credential,
+              data: { gender, height, weight, weightGoalOn30day },
+            });
+
+            localStorage.setItem("access_token", data.access_token);
+            navigate("/");
+          }
+        } catch (error) {
+          console.log(error);
+          
+          Swal.fire("Error", "Authentication failed. Please try again.", "error");
+        }
+      },
+    });
+
+    window.google.accounts.id.renderButton(
+      document.getElementById("buttonDiv"),
+      { theme: "outline", size: "large" }
+    );
+
+    window.google.accounts.id.prompt();
+  }, []);
+
+  
   return (
     <div className="font-[sans-serif]">
       <div className="grid lg:grid-cols-2 md:grid-cols-2 items-center gap-4">
@@ -116,6 +196,9 @@ const Login = () => {
             >
               Sign in
             </button>
+          </div>
+          <div className="mt-12">
+            <div id="buttonDiv"></div>
           </div>
           <p className="text-gray-800 text-sm mt-6">
             Dont have an account{" "}

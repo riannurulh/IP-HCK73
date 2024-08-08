@@ -8,8 +8,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import HomePage from "./pages/Home";
 import Navbar from "./components/Navbar";
-import MyClub from "./pages/MyClub";
-import UpdateClub from "./pages/ClubUpdate";
+
 
 const router = createBrowserRouter([
   {
@@ -42,14 +41,6 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
-      },
-      {
-        path: "/my-clubs",
-        element: <MyClub />,
-      },
-      {
-        path: "/update-club/:clubId/:myClubId",
-        element: <UpdateClub />,
       },
     ],
   },

@@ -1,7 +1,7 @@
 const { OpenAI } = require("openai");
 require("dotenv").config();
 
-module.exports = async function openAI(gender, height, weigth, wheightGoalOn30day) {
+module.exports = async function openAI(getExercise, gender, height, weigth, wheightGoalOn30day) {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -10,36 +10,9 @@ module.exports = async function openAI(gender, height, weigth, wheightGoalOn30da
     messages: [
       {
         role: "system",
-        content: `[
-  { "name": "Push-up" },
-  { "name": "Bench Press" },
-  { "name": "Dumbbell Flyes" },
-  { "name": "Deadlift" },
-  { "name": "Pull-up" },
-  { "name": "Lat Pulldown" },
-  { "name": "Squat" },
-  { "name": "Leg Press" },
-  { "name": "Lunges" },
-  { "name": "Shoulder Press" },
-  { "name": "Lateral Raises" },
-  { "name": "Front Raises" },
-  { "name": "Bicep Curl" },
-  { "name": "Tricep Dips" },
-  { "name": "Hammer Curl" },
-  { "name": "Treadmill" },
-  { "name": "Sepeda Statis" },
-  { "name": "Elliptical" },
-  { "name": "Rower" },
-  { "name": "Plank" },
-  { "name": "Crunches" },
-  { "name": "Stretching" },
-  { "name": "Yoga" },
-  { "name": "Kettlebell Swings" },
-  { "name": "Medicine Ball Throws" },
-  { "name": "Battle Ropes" }
-]
+        content: `${getExercise}
 ${{ gender, height, weigth, wheightGoalOn30day }}
-Buat rutinitas latihan gym mingguan berdsarkan data di atas menggunakan data latihan berikut. Setiap hari latihan harus mencakup 4 latihan yang berbeda. Gunakan format JSON berikut untuk setiap hari latihan: 
+Buat rutinitas latihan gym mingguan berdsarkan data di atas menggunakan data latihan berikut. Setiap hari latihan harus mencakup 4 latihan yang berbeda, jumlah setRepetition maksimal adalah 12 dan minimal 8, jumlah totalSet berkisr antara 3-4. Gunakan format JSON berikut untuk setiap hari latihan: 
 
 routine:[
   {
@@ -82,7 +55,6 @@ Buat rutinitas seperti contoh di atas dengan 4 latihan per hari. `
     model: 'gpt-4o-mini',
     response_format: { type: "json_object" },
   });
-//   console.log(completion);
   return completion
   
 };

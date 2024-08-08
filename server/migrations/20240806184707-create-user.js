@@ -42,6 +42,12 @@ module.exports = {
           },
         }
       },
+      isSubscribed: {
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false,
+        
+      },
       password: {
         type: Sequelize.STRING,
         allowNull:false,
