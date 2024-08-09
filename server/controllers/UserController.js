@@ -62,7 +62,8 @@ class UserController {
         weight,
         weightGoalOn30day
       );
-
+      console.log(responseOpenAI);
+      
       let bulkData = JSON.parse(
         responseOpenAI.choices[0].message.content
       ).routine.map((el) => {
