@@ -2,9 +2,12 @@ import { Link, Outlet } from "react-router-dom";
 import Swal from "sweetalert2";
 import PostCreate from "../helpers/PostRequest";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {  fetchPlans } from "../features/counter/planSlice";
 
 const Navbar = () => {
   const[update,setUpdate] = useState(false)
+  const dispatch = useDispatch()
   const handlePlan = async () => {
     try {
       const dataSwal = await Swal.fire({
@@ -36,6 +39,7 @@ const Navbar = () => {
         },
       });
       setUpdate(true)
+      dispatch(fetchPlans())
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +56,7 @@ const Navbar = () => {
             />
           </a>
 
-          <div
+          {/* <div
             id="collapseMenu"
             className="max-lg:hidden lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50"
           >
@@ -76,7 +80,7 @@ const Navbar = () => {
               </svg>
             </button>
 
-            {/* <ul className="lg:flex gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
+            <ul className="lg:flex gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
               <li className="mb-6 hidden max-lg:block">
                 <a href="javascript:void(0)">
                   <img
@@ -95,12 +99,12 @@ const Navbar = () => {
                 </a>
               </li>
               <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
-                <a
-                  href="javascript:void(0)"
+                <button
+                //  onClick={handlePlan}
                   className="hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]"
                 >
-                  Team
-                </a>
+                  Join Our Gym
+                </button>
               </li>
               <li className="max-lg:border-b border-gray-300 max-lg:py-3 px-3">
                 <a
@@ -134,8 +138,8 @@ const Navbar = () => {
                   Contact
                 </a>
               </li>
-            </ul> */}
-          </div>
+            </ul>
+          </div> */}
 
           <div className="flex max-lg:ml-auto space-x-3">
             <button
