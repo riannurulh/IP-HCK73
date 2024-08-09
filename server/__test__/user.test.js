@@ -126,3 +126,41 @@ test("POST /login your password is invalid", async () => {
     "Error login user not found atau password not matched"
   );
 });
+
+// describe('POST /register', () => {
+//   test('POST /register success should return id, and email', async () => {
+//       let response = await request(app).post('/register').send({
+//           email: "hoshi@example.com",
+//           password: "horanghae"
+//       })
+//       expect(response.status).toBe(201)
+//       expect(response.body).toBeInstanceOf(Object)
+//       expect(response.body).toHaveProperty("id", expect.any(Number))
+//   })
+
+//   test('POST /register failed should return error message if username is null', async () => {
+//       let response = await request(app).post('/register').send({
+//           email: "hoshi@example.com",
+//           password: "horanghae"
+//       })
+//       expect(response.status).toBe(400)
+
+//   })
+
+//   test('POST /register failed should return error message if email is null', async () => {
+//       let response = await request(app).post('/register').send({
+//           email: "",
+//           password: "horanghae"
+//       })
+//       expect(response.status).toBe(400)
+//   })
+
+//   test('POST /register failed should return error message if password is null', async () => {
+//       let response = await request(app).post('/register').send({
+//           email: "hoshi@example.com",
+//           password: ""
+//       })
+//       expect(response.status).toBe(400)
+//       expect(response.body).toBeInstanceOf(Object)
+//   })
+// })
