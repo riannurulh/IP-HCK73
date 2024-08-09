@@ -29,7 +29,11 @@ const Register = () => {
       console.log(data);
       navigate("/login");
     } catch (error) {
-      console.log(error.response.data);
+      Swal.fire({
+        title: "Error",
+        text: `${error.response.data.message}`,
+        icon: "error",
+      });
     }
   };
   return (

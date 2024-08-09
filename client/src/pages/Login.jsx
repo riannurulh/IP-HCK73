@@ -22,7 +22,12 @@ const Login = () => {
       localStorage.setItem("access_token", data.access_token);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        title: "Error",
+        text: `${error.response.data.message}`,
+        icon: "error",
+      });
+      console.log(error.response.data.message);
     }
   };
   useEffect(() => {
