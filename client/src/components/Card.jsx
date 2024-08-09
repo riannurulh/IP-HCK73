@@ -17,7 +17,7 @@ const Card = ({ item, handleDelete, handleUpgrade, isLoading }) => {
       >
         <div className="bg-gradient-to-t from-black via-transparent to-transparent h-full p-6 flex items-end">
           <h5 className="text-white text-xl font-bold leading-tight">
-            {item.Exercise.name}asd
+            {item.Exercise.name}
           </h5>
         </div>
       </div>

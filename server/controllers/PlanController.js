@@ -76,7 +76,7 @@ class PlanController {
       console.log(bulkData);
 
       await Plan.bulkCreate(bulkData);
-      res.status(200).json({});
+      res.status(201).json({message: "create new plan succeed"});
     } catch (error) {
       res.send(error.message);
     }
