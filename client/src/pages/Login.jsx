@@ -22,7 +22,12 @@ const Login = () => {
       localStorage.setItem("access_token", data.access_token);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        title: "Error",
+        text: `${error.response.data.message}`,
+        icon: "error",
+      });
+      console.log(error.response.data.message);
     }
   };
   useEffect(() => {
@@ -34,13 +39,13 @@ const Login = () => {
 
         // Check if the user already exists
         try {
-          const userCheckResponse = await axios.post("http://localhost:3000/auth/check-user", {
+          const userCheckResponse = await axios.post("https://ip.vexus.my.id/auth/check-user", {
             googleToken: response.credential
           });
 
           if (userCheckResponse.data.exists) {
             // User exists, proceed with the login
-            const { data } = await axios.post("http://localhost:3000/auth/google", {
+            const { data } = await axios.post("https://ip.vexus.my.id/auth/google", {
               googleToken: response.credential
             });
 
@@ -100,7 +105,7 @@ const Login = () => {
 
             const { gender, height, weight, weightGoalOn30day } = dataSwal.value;
 
-            const { data } = await axios.post("http://localhost:3000/auth/google", {
+            const { data } = await axios.post("https://ip.vexus.my.id/auth/google", {
               googleToken: response.credential,
               data: { gender, height, weight, weightGoalOn30day },
             });

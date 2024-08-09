@@ -14,7 +14,7 @@ const Navbar = () => {
         title: "Enter your details",
         html: `
             <label>Weight Goal</label>
-            <input type="text" id="swal-input4" class="swal2-input" placeholder="Weight Goal">
+            <input type="number" id="swal-input4" class="swal2-input" placeholder="Weight Goal">
         `,
         focusConfirm: false,
         preConfirm: () => {
@@ -41,6 +41,11 @@ const Navbar = () => {
       setUpdate(true)
       dispatch(fetchPlans())
     } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: `${error.response.data.message}`,
+        icon: "error",
+      });
       console.log(error);
     }
   };

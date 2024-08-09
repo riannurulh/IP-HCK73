@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const PostCreate = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://ip.vexus.my.id',
   });
 
   export default PostCreate
